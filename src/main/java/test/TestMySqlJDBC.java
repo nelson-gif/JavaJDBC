@@ -11,7 +11,6 @@ public class TestMySqlJDBC {
 	public static void main(String[] args) {
 		
 		PersonaDAO personaDao = new PersonaDAO();
-		List<Persona> personas = personaDao.seleccionar();
 		
 		
 		
@@ -27,6 +26,13 @@ public class TestMySqlJDBC {
 //		int contador = personaDao.actualizar(persona);
 //		System.out.println(contador + " registros fueron actualizados");
 		
+		/*
+		 * Persona persona = new Persona(1); int contador =
+		 * personaDao.eliminar(persona); System.out.println(contador +
+		 * " record was deleted");
+		 */
+		
+		List<Persona> personas = personaDao.seleccionar();
 		personas.forEach(personax -> {
 			System.out.println(personax);
 		});

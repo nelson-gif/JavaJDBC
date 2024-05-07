@@ -10,6 +10,7 @@ public class PersonaDAO {
 	private static final String SQL_SELECT = "SELECT * FROM test.persona";
 	private static final String SQL_INSERT = "INSERT INTO test.persona (nombre, apellido, email, telefono) VALUES (?,?,?,?)";
 	private static final String SQL_UPDATE = "UPDATE test.persona SET nombre = ?, apellido = ?, telefono = ? WHERE idpersona = ?";
+	private static final String SQL_DELETE = "DELETE FROM test.persona WHERE idpersona = ?";
 	
 	public List<Persona> seleccionar(){
 		Connection conn = null;
@@ -121,8 +122,35 @@ public class PersonaDAO {
 		return contador;
 	}
 	
-//	public int eliminar() {
-//		
-//	}
+	public int eliminar(Persona persona) {
+		  Connection conn = null;
+		  PreparedStatement stmt = null;
+		  int contador = 0;
+		  
+		  try {
+			conn = Conexion.getConnection();
+			stmt = conn.prepareStatement(SQL_DELETE);
+			
+			stmt.setInt(1, persona.getIdPersona());
+			
+			contador = stmt.executeUpdate();
+			
+		} catch (SQLException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace(System.out);
+		}finally {
+			try {
+				Conexion.close(stmt);
+				Conexion.close(conn);
+			} catch (SQLException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace(System.out);
+			}
+		}
+		
+		  return contador;
+	  }
+	
+
 
 }
