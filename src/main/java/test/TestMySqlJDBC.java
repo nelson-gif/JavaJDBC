@@ -60,7 +60,6 @@ public class TestMySqlJDBC {
 		 * resultado.close(); instruccion.close(); conexion.close();
 		 * 
 		 * } catch (SQLException e) { // TODO Auto-generated catch block
-		 * e.printStackTrace(System.out); }
 		 */
 		 
 		
