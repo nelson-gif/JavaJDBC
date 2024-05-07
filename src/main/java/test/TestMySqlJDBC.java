@@ -13,9 +13,7 @@ public class TestMySqlJDBC {
 		PersonaDAO personaDao = new PersonaDAO();
 		List<Persona> personas = personaDao.seleccionar();
 		
-		/*
-		 * personas.forEach(persona -> { System.out.println(persona); });
-		 */
+		
 		
 		//insertando nuevo objeto persona
 		/*
@@ -23,6 +21,11 @@ public class TestMySqlJDBC {
 		 * "234345346"); int registros = personaDao.insertar(persona);
 		 * System.out.println(registros + " registros fueron insertados");
 		 */
+		
+		//actualizando un dato
+//		Persona persona = new Persona(5, "Pedro", "Linarez", "pedroL@gamil.com", "345345");
+//		int contador = personaDao.actualizar(persona);
+//		System.out.println(contador + " registros fueron actualizados");
 		
 		personas.forEach(personax -> {
 			System.out.println(personax);

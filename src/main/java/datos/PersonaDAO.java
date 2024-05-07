@@ -9,6 +9,7 @@ public class PersonaDAO {
 	
 	private static final String SQL_SELECT = "SELECT * FROM test.persona";
 	private static final String SQL_INSERT = "INSERT INTO test.persona (nombre, apellido, email, telefono) VALUES (?,?,?,?)";
+	private static final String SQL_UPDATE = "UPDATE test.persona SET nombre = ?, apellido = ?, telefono = ? WHERE idpersona = ?";
 	
 	public List<Persona> seleccionar(){
 		Connection conn = null;
@@ -26,7 +27,7 @@ public class PersonaDAO {
 				int idPersona = rs.getInt("idpersona");
 				String nombre = rs.getString("nombre");
 				String apellido = rs.getString("apellido");
-				String email = rs.getString("apellido");
+				String email = rs.getString("email");
 				String telefono = rs.getString("telefono");
 				
 				persona = new Persona(idPersona, nombre, apellido, email, telefono);
@@ -83,5 +84,45 @@ public class PersonaDAO {
 		
 		return registros;
 	}
+	
+	public int actualizar(Persona persona) {
+		Connection conn = null;
+		PreparedStatement stmt = null;
+		int contador = 0;
+		
+		try {
+			conn = Conexion.getConnection();
+			stmt = conn.prepareStatement(SQL_UPDATE);
+			
+			stmt.setString(1, persona.getNombre());
+			stmt.setString(2, persona.getApellido());
+			stmt.setString(3, persona.getTelefono());
+			stmt.setInt(4, persona.getIdPersona());
+			
+			contador = stmt.executeUpdate();
+			
+			
+			
+		} catch (SQLException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace(System.out);
+		}finally {
+			try {
+				Conexion.close(stmt);
+				Conexion.close(conn);
+			} catch (SQLException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace(System.out);
+			}
+		}
+		
+		
+		
+		return contador;
+	}
+	
+//	public int eliminar() {
+//		
+//	}
 
 }
