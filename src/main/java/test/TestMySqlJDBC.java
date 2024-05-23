@@ -10,6 +10,64 @@ public class TestMySqlJDBC {
 	
 	public static void main(String[] args) {
 		
+		//personaSql();
+		usuarioSql();
+		
+		
+	}
+	
+	public static void usuarioSql() {
+		
+		
+		UsuarioDao userDao = new UsuarioDao();
+		
+		
+		Usuario user3 = new Usuario("carlos.g", "passwor");
+		Usuario user4 = new Usuario("nvl-q", "asmin");
+		Usuario user5 = new Usuario("user-name-1", "guat=wer");
+		
+		//insertando registros
+//		int insert1 = userDao.insertar(user3);
+		//System.out.println(insert1+"fueron actualizados");
+//		int insert2 = userDao.insertar(user4);
+		//System.out.println(insert2+"fueron actualizados");
+//		int insert3 = userDao.insertar(user5);
+		//System.out.println(insert3+"fueron actualizados");
+		
+		
+		//actualizando registros
+//		Usuario user33 = new Usuario(3, "carlos.g-actualizado", "passwor-actualizado");
+//		Usuario user44 = new Usuario(4, "nvl-q-actualizado", "asmin-actualizado");
+//		
+//		int update1 = userDao.update(user33);
+//		System.out.println("Se actualizo: "+update1+"registro");
+//		int update2 = userDao.update(user44);
+//		System.out.println("Se actualizo: "+update2+"registro");
+		
+
+		//eliminando registros
+//		Usuario delete = new Usuario(1);
+//		Usuario delete2 = new Usuario(2);
+//		int delete1 = userDao.eliminar(delete); 
+//		delete1 += userDao.eliminar(delete2); 
+		
+//		System.out.println(delete1+" registros were deleted");
+		
+		List<Usuario> listUser = userDao.seleccionar();
+		print(listUser);
+		
+		
+	} 
+	
+	public static <T> void print(List<T> list) {
+		list.forEach( element -> {
+			System.out.println(element);
+		});
+	}
+	
+	
+	
+	public static void personaSql() {
 		PersonaDAO personaDao = new PersonaDAO();
 		
 		
@@ -33,9 +91,7 @@ public class TestMySqlJDBC {
 		 */
 		
 		List<Persona> personas = personaDao.seleccionar();
-		personas.forEach(personax -> {
-			System.out.println(personax);
-		});
+		print(personas);
 		
 		
 		
@@ -63,8 +119,6 @@ public class TestMySqlJDBC {
 		 * e.printStackTrace(System.out); }
 		 */
 		 
-		
-		
 		
 	}
 
