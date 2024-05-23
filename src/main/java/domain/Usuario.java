@@ -8,6 +8,10 @@ public class Usuario {
 	
 	public Usuario() {
 	}
+	
+	public Usuario(int id_usuario) {
+		this.id_usuario = id_usuario;
+	}
 
 	public Usuario(int id_usuario, String username, String password) {
 		super();
