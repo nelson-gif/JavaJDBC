@@ -1,7 +1,6 @@
 package test;
 
 import java.sql.*;
-import java.util.*;
 
 import datos.*;
 import domain.*;
@@ -10,6 +9,77 @@ public class TestMySqlJDBC {
 	
 	public static void main(String[] args) {
 		
+		//testPersonaDao();
+		
+		testUsuarioDao();
+		
+		
+		
+	}
+	
+	public static void testUsuarioDao() {
+		
+		Connection conexionUser = null;
+		
+		try {
+			
+			
+			conexionUser = Conexion.getConnection();
+			
+			if(conexionUser.getAutoCommit()) {
+				conexionUser.setAutoCommit(false);
+			}
+			
+			UsuarioDao objUser = new UsuarioDao(conexionUser);
+			
+			Usuario delete1 = new Usuario();
+			delete1.setId_usuario(11);
+			
+			Usuario delete2 = new Usuario();
+			delete2.setId_usuario(10);
+			
+			Usuario delete3 = new Usuario();
+			delete3.setId_usuario(9);
+			
+			int registroEliminado = objUser.eliminar(delete1);
+			registroEliminado =+ objUser.eliminar(delete2);
+			registroEliminado =+ objUser.eliminar(delete3);
+			
+			System.out.println("Se eliminaron: "+registroEliminado+" registros");
+			
+			Usuario insert1 = new Usuario("userInserted1", "passwordInserted1");
+			Usuario insert2 = new Usuario("userInserted2", "passwordInserted2");
+			
+			int registroInsertado = objUser.insertar(insert1);
+			registroInsertado += objUser.insertar(insert2);
+			
+			System.out.println("Se insertaron: "+ registroInsertado+" registros");
+			
+			conexionUser.commit();
+			System.out.println("-----------------------------------------------");
+			objUser.seleccionar().forEach( elemento -> {
+				System.out.println(elemento);
+			});
+			
+			
+		} catch (SQLException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace(System.out);
+			System.out.println("Se entro al rollback, actions were not executed");
+			try {
+				conexionUser.rollback();
+			} catch (SQLException e1) {
+				// TODO Auto-generated catch block
+				e1.printStackTrace(System.out);
+			}
+			
+		}
+		
+	}
+		
+	
+	
+	public static void testPersonaDao() {
 		Connection conexion = null;
 		
 		
@@ -51,11 +121,9 @@ public class TestMySqlJDBC {
 				// TODO Auto-generated catch block
 				e1.printStackTrace(System.out);
 			}
-			
 		}
-		
-	}
-	
 	
 
+	}
+	
 }

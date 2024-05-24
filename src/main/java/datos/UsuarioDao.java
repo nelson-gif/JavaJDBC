@@ -7,12 +7,22 @@ import domain.*;
 
 public class UsuarioDao {
 	
+	private Connection conexionRecibir;
+	
 	private static final String SQL_SELECT = "SELECT * FROM test.usuario";
 	private static final String SQL_INSERT = "INSERT INTO test.usuario (username, password) VALUES (?,?)";
 	private static final String SQL_UPDATE = "UPDATE test.usuario SET username = ?, password = ? WHERE idusuario = ?";
 	private static final String SQL_DELETE = "DELETE FROM test.usuario WHERE idusuario = ?";
 	
-	public List<Usuario> seleccionar(){
+	
+	
+	public UsuarioDao() {}
+	
+	public UsuarioDao(Connection conexionRecibir) {
+		this.conexionRecibir = conexionRecibir;
+	}
+	
+	public List<Usuario> seleccionar() throws SQLException{
 		
 		List<Usuario> list = new ArrayList<>();
 		Connection conn = null;
@@ -21,7 +31,7 @@ public class UsuarioDao {
 		
 		try {
 			
-			conn = Conexion.getConnection();
+			conn = this.conexionRecibir != null ? this.conexionRecibir : Conexion.getConnection();
 			stmt = conn.prepareStatement(SQL_SELECT);
 			rs = stmt.executeQuery();
 			
@@ -34,14 +44,12 @@ public class UsuarioDao {
 				list.add(user);
 			}
 			
-		} catch (SQLException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace(System.out);
-		}finally {
+		} finally {
 			try {
 				Conexion.close(rs);
 				Conexion.close(stmt);
-				Conexion.close(conn);
+				if(this.conexionRecibir == null)
+					Conexion.close(conn);
 			} catch (SQLException e) {
 				// TODO Auto-generated catch block
 				e.printStackTrace(System.out);
@@ -52,14 +60,14 @@ public class UsuarioDao {
 		return list;
 	}
 	
-	public int insertar(Usuario user) {
+	public int insertar(Usuario user) throws SQLException {
 		
 		Connection conn = null;
 		PreparedStatement stmt = null;
 		int registros = 0;
 		
 		try {
-			conn = Conexion.getConnection();
+			conn = this.conexionRecibir != null ? this.conexionRecibir : Conexion.getConnection();
 			stmt = conn.prepareStatement(SQL_INSERT);
 			
 			stmt.setString(1, user.getUsername());
@@ -67,13 +75,11 @@ public class UsuarioDao {
 			
 			registros = stmt.executeUpdate();
 			
-		} catch (SQLException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace(System.out);
 		}finally {
 			try {
 				Conexion.close(stmt);
-				Conexion.close(conn);
+				if(this.conexionRecibir == null)
+					Conexion.close(conn);
 			} catch (SQLException e) {
 				// TODO Auto-generated catch block
 				e.printStackTrace();
@@ -86,13 +92,13 @@ public class UsuarioDao {
 	}
 	
 	
-	public int update(Usuario user) {
+	public int update(Usuario user) throws SQLException {
 		int registros = 0;
 		Connection conn = null;
 		PreparedStatement stmt = null;
 		
 		try {
-			conn = Conexion.getConnection();
+			conn = this.conexionRecibir != null ? this.conexionRecibir : Conexion.getConnection();
 			stmt = conn.prepareStatement(SQL_UPDATE);
 			
 			stmt.setString(1, user.getUsername());
@@ -101,13 +107,11 @@ public class UsuarioDao {
 			
 			registros = stmt.executeUpdate();
 			
-		} catch (SQLException e) {
-			e.printStackTrace(System.out);
-			System.out.println("el registro no existe");
 		}finally {
 			try {
 				Conexion.close(stmt);
-				Conexion.close(conn);
+				if(this.conexionRecibir == null)
+					Conexion.close(conn);
 			} catch (SQLException e) {
 				// TODO Auto-generated catch block
 				e.printStackTrace();
@@ -119,27 +123,25 @@ public class UsuarioDao {
 		return registros;
 	}
 	
-	public int eliminar(Usuario user) {
+	public int eliminar(Usuario user) throws SQLException {
 		int registro = 0;
 		Connection conn = null;
 		PreparedStatement stmt = null;
 		
 		try {
 			
-			conn = Conexion.getConnection();
+			conn = this.conexionRecibir != null ? this.conexionRecibir : Conexion.getConnection();
 			stmt = conn.prepareStatement(SQL_DELETE);
 			
 			stmt.setInt(1, user.getId_usuario());
 			
 			registro = stmt.executeUpdate();
 			
-		} catch (SQLException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace(System.out);
 		}finally {
 			try {
 				Conexion.close(stmt);
-				Conexion.close(conn);
+				if(this.conexionRecibir == null)
+					Conexion.close(conn);
 			} catch (SQLException e) {
 				// TODO Auto-generated catch block
 				e.printStackTrace(System.out);
