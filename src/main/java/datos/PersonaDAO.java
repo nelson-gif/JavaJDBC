@@ -7,12 +7,20 @@ import domain.*;
 
 public class PersonaDAO {
 	
+	private Connection ConexionTransaccional;
+	
 	private static final String SQL_SELECT = "SELECT * FROM test.persona";
 	private static final String SQL_INSERT = "INSERT INTO test.persona (nombre, apellido, email, telefono) VALUES (?,?,?,?)";
 	private static final String SQL_UPDATE = "UPDATE test.persona SET nombre = ?, apellido = ?, telefono = ? WHERE idpersona = ?";
 	private static final String SQL_DELETE = "DELETE FROM test.persona WHERE idpersona = ?";
 	
-	public List<Persona> seleccionar(){
+	public PersonaDAO() {}
+	
+	public PersonaDAO(Connection conexionTransaccional) {
+		this.ConexionTransaccional = conexionTransaccional;
+	}
+	
+	public List<Persona> seleccionar() throws SQLException{
 		Connection conn = null;
 		PreparedStatement stmt = null;
 		ResultSet rs = null;
@@ -20,7 +28,7 @@ public class PersonaDAO {
 		List<Persona> personas = new ArrayList<>();
 		
 		try {
-			conn = Conexion.getConnection();
+			conn = this.ConexionTransaccional != null ? this.ConexionTransaccional : Conexion.getConnection();
 			stmt = conn.prepareStatement(SQL_SELECT);
 			rs = stmt.executeQuery();
 			
@@ -35,14 +43,13 @@ public class PersonaDAO {
 				personas.add(persona);
 			}
 			
-		} catch (SQLException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace(System.out);
+		
 		}finally {
 			try {
 				Conexion.close(rs);
 				Conexion.close(stmt);
-				Conexion.close(conn);
+				if(this.ConexionTransaccional == null)
+					Conexion.close(conn);
 			} catch (SQLException e) {
 				// TODO Auto-generated catch block
 				e.printStackTrace(System.out);
@@ -54,13 +61,13 @@ public class PersonaDAO {
 		
 	}
 	
-	public int insertar(Persona persona) {
+	public int insertar(Persona persona) throws SQLException {
 		Connection conn = null;
 		PreparedStatement stmt = null;
 		int registros = 0;
 		
 		try {
-			conn = Conexion.getConnection();
+			conn = this.ConexionTransaccional != null ? this.ConexionTransaccional : Conexion.getConnection();
 			stmt =  conn.prepareStatement(SQL_INSERT);
 			
 			stmt.setString(1, persona.getNombre());
@@ -70,13 +77,11 @@ public class PersonaDAO {
 			
 			registros = stmt.executeUpdate();
 			
-		} catch (SQLException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace(System.out);
 		}finally {
 			try {
 				Conexion.close(stmt);
-				Conexion.close(conn);
+				if(this.ConexionTransaccional == null)
+					Conexion.close(conn);
 			} catch (SQLException e) {
 				// TODO Auto-generated catch block
 				e.printStackTrace(System.out);
@@ -86,13 +91,13 @@ public class PersonaDAO {
 		return registros;
 	}
 	
-	public int actualizar(Persona persona) {
+	public int actualizar(Persona persona) throws SQLException {
 		Connection conn = null;
 		PreparedStatement stmt = null;
 		int contador = 0;
 		
 		try {
-			conn = Conexion.getConnection();
+			conn = this.ConexionTransaccional != null ? this.ConexionTransaccional : Conexion.getConnection();
 			stmt = conn.prepareStatement(SQL_UPDATE);
 			
 			stmt.setString(1, persona.getNombre());
@@ -104,13 +109,11 @@ public class PersonaDAO {
 			
 			
 			
-		} catch (SQLException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace(System.out);
 		}finally {
 			try {
 				Conexion.close(stmt);
-				Conexion.close(conn);
+				if(this.ConexionTransaccional == null)
+					Conexion.close(conn);
 			} catch (SQLException e) {
 				// TODO Auto-generated catch block
 				e.printStackTrace(System.out);
@@ -122,26 +125,24 @@ public class PersonaDAO {
 		return contador;
 	}
 	
-	public int eliminar(Persona persona) {
+	public int eliminar(Persona persona) throws SQLException {
 		  Connection conn = null;
 		  PreparedStatement stmt = null;
 		  int contador = 0;
 		  
 		  try {
-			conn = Conexion.getConnection();
+			conn = this.ConexionTransaccional != null ? this.ConexionTransaccional : Conexion.getConnection();
 			stmt = conn.prepareStatement(SQL_DELETE);
 			
 			stmt.setInt(1, persona.getIdPersona());
 			
 			contador = stmt.executeUpdate();
 			
-		} catch (SQLException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace(System.out);
 		}finally {
 			try {
 				Conexion.close(stmt);
-				Conexion.close(conn);
+				if(this.ConexionTransaccional == null)
+					Conexion.close(conn);
 			} catch (SQLException e) {
 				// TODO Auto-generated catch block
 				e.printStackTrace(System.out);
