@@ -5,7 +5,7 @@ import java.sql.*;
 
 import domain.*;
 
-public class PersonaDAO {
+public class PersonaDAOJDBC implements IPersonaDao{
 	
 	private Connection ConexionTransaccional;
 	
@@ -14,18 +14,18 @@ public class PersonaDAO {
 	private static final String SQL_UPDATE = "UPDATE test.persona SET nombre = ?, apellido = ?, telefono = ? WHERE idpersona = ?";
 	private static final String SQL_DELETE = "DELETE FROM test.persona WHERE idpersona = ?";
 	
-	public PersonaDAO() {}
+	public PersonaDAOJDBC() {}
 	
-	public PersonaDAO(Connection conexionTransaccional) {
+	public PersonaDAOJDBC(Connection conexionTransaccional) {
 		this.ConexionTransaccional = conexionTransaccional;
 	}
 	
-	public List<Persona> seleccionar() throws SQLException{
+	public List<PersonaDTO> select() throws SQLException{
 		Connection conn = null;
 		PreparedStatement stmt = null;
 		ResultSet rs = null;
-		Persona persona = null;
-		List<Persona> personas = new ArrayList<>();
+		PersonaDTO personaDTO = null;
+		List<PersonaDTO> personaDTOs = new ArrayList<>();
 		
 		try {
 			conn = this.ConexionTransaccional != null ? this.ConexionTransaccional : Conexion.getConnection();
@@ -39,8 +39,8 @@ public class PersonaDAO {
 				String email = rs.getString("email");
 				String telefono = rs.getString("telefono");
 				
-				persona = new Persona(idPersona, nombre, apellido, email, telefono);
-				personas.add(persona);
+				personaDTO = new PersonaDTO(idPersona, nombre, apellido, email, telefono);
+				personaDTOs.add(personaDTO);
 			}
 			
 		
@@ -57,11 +57,11 @@ public class PersonaDAO {
 			
 		}
 		
-		return personas;
+		return personaDTOs;
 		
 	}
 	
-	public int insertar(Persona persona) throws SQLException {
+	public int insert(PersonaDTO personaDTO) throws SQLException {
 		Connection conn = null;
 		PreparedStatement stmt = null;
 		int registros = 0;
@@ -70,10 +70,10 @@ public class PersonaDAO {
 			conn = this.ConexionTransaccional != null ? this.ConexionTransaccional : Conexion.getConnection();
 			stmt =  conn.prepareStatement(SQL_INSERT);
 			
-			stmt.setString(1, persona.getNombre());
-			stmt.setString(2, persona.getApellido());
-			stmt.setString(3, persona.getEmail());
-			stmt.setString(4, persona.getTelefono());
+			stmt.setString(1, personaDTO.getNombre());
+			stmt.setString(2, personaDTO.getApellido());
+			stmt.setString(3, personaDTO.getEmail());
+			stmt.setString(4, personaDTO.getTelefono());
 			
 			registros = stmt.executeUpdate();
 			
@@ -91,7 +91,7 @@ public class PersonaDAO {
 		return registros;
 	}
 	
-	public int actualizar(Persona persona) throws SQLException {
+	public int update(PersonaDTO personaDTO) throws SQLException {
 		Connection conn = null;
 		PreparedStatement stmt = null;
 		int contador = 0;
@@ -100,10 +100,10 @@ public class PersonaDAO {
 			conn = this.ConexionTransaccional != null ? this.ConexionTransaccional : Conexion.getConnection();
 			stmt = conn.prepareStatement(SQL_UPDATE);
 			
-			stmt.setString(1, persona.getNombre());
-			stmt.setString(2, persona.getApellido());
-			stmt.setString(3, persona.getTelefono());
-			stmt.setInt(4, persona.getIdPersona());
+			stmt.setString(1, personaDTO.getNombre());
+			stmt.setString(2, personaDTO.getApellido());
+			stmt.setString(3, personaDTO.getTelefono());
+			stmt.setInt(4, personaDTO.getIdPersona());
 			
 			contador = stmt.executeUpdate();
 			
@@ -125,7 +125,7 @@ public class PersonaDAO {
 		return contador;
 	}
 	
-	public int eliminar(Persona persona) throws SQLException {
+	public int delete(PersonaDTO personaDTO) throws SQLException {
 		  Connection conn = null;
 		  PreparedStatement stmt = null;
 		  int contador = 0;
@@ -134,7 +134,7 @@ public class PersonaDAO {
 			conn = this.ConexionTransaccional != null ? this.ConexionTransaccional : Conexion.getConnection();
 			stmt = conn.prepareStatement(SQL_DELETE);
 			
-			stmt.setInt(1, persona.getIdPersona());
+			stmt.setInt(1, personaDTO.getIdPersona());
 			
 			contador = stmt.executeUpdate();
 			

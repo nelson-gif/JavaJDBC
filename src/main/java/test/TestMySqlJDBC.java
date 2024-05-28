@@ -1,6 +1,7 @@
 package test;
 
 import java.sql.*;
+import java.util.*;
 
 import datos.*;
 import domain.*;
@@ -9,7 +10,7 @@ public class TestMySqlJDBC {
 	
 	public static void main(String[] args) {
 		
-		//testPersonaDao();
+		testPersonaDao();
 		
 		testUsuarioDao();
 		
@@ -30,36 +31,17 @@ public class TestMySqlJDBC {
 				conexionUser.setAutoCommit(false);
 			}
 			
-			UsuarioDao objUser = new UsuarioDao(conexionUser);
+			IUsuarioDao usuarioDao = new UsuarioDAOJDBC(conexionUser);
 			
-			Usuario delete1 = new Usuario();
-			delete1.setId_usuario(11);
+			List<UsuarioDTO> usuarios = usuarioDao.select();
 			
-			Usuario delete2 = new Usuario();
-			delete2.setId_usuario(10);
+			usuarios.forEach( element -> {
+				System.out.println("usuario DTO: " +element);
+			});
 			
-			Usuario delete3 = new Usuario();
-			delete3.setId_usuario(9);
-			
-			int registroEliminado = objUser.eliminar(delete1);
-			registroEliminado =+ objUser.eliminar(delete2);
-			registroEliminado =+ objUser.eliminar(delete3);
-			
-			System.out.println("Se eliminaron: "+registroEliminado+" registros");
-			
-			Usuario insert1 = new Usuario("userInserted1", "passwordInserted1");
-			Usuario insert2 = new Usuario("userInserted2", "passwordInserted2");
-			
-			int registroInsertado = objUser.insertar(insert1);
-			registroInsertado += objUser.insertar(insert2);
-			
-			System.out.println("Se insertaron: "+ registroInsertado+" registros");
 			
 			conexionUser.commit();
-			System.out.println("-----------------------------------------------");
-			objUser.seleccionar().forEach( elemento -> {
-				System.out.println(elemento);
-			});
+			System.out.println("Se hizo commit de la transaccion");
 			
 			
 		} catch (SQLException e) {
@@ -90,25 +72,17 @@ public class TestMySqlJDBC {
 				conexion.setAutoCommit(false);
 			}
 			
-			PersonaDAO personaDao = new PersonaDAO(conexion);
+			IPersonaDao personaDao = new PersonaDAOJDBC(conexion);
 			
-			Persona cambioPersona = new Persona();
-			cambioPersona.setIdPersona(2);
-			cambioPersona.setNombre("karla modificado");
-			cambioPersona.setApellido("lara modificado");
+			List<PersonaDTO> personas = personaDao.select();
 			
-		    int registro = personaDao.actualizar(cambioPersona);
-		    System.out.println("Se actualizaron: "+registro+" registros");
-		    
-		    Persona insertPersona = new Persona();
-		    insertPersona.setNombre("Carlos nuevo");
-		    insertPersona.setApellido("apellido Carlos");
-		    int registro2 = personaDao.insertar(insertPersona);
-		    System.out.println("Se insertaron: "+registro2+" registros");
+			personas.forEach( element-> {
+				System.out.println("Persona DTO: " +element);
+			});
 		    
 		    //guarda los cambios si todo salio bien
 		    conexion.commit();
-		    
+		    System.out.println("Se ha hecho commit de la transaccion");
 			
 		} catch (SQLException e) {
 			// TODO Auto-generated catch block

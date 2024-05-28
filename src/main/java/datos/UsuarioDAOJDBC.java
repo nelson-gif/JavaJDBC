@@ -5,7 +5,7 @@ import java.util.*;
 
 import domain.*;
 
-public class UsuarioDao {
+public class UsuarioDAOJDBC implements IUsuarioDao{
 	
 	private Connection conexionRecibir;
 	
@@ -16,15 +16,15 @@ public class UsuarioDao {
 	
 	
 	
-	public UsuarioDao() {}
+	public UsuarioDAOJDBC() {}
 	
-	public UsuarioDao(Connection conexionRecibir) {
+	public UsuarioDAOJDBC(Connection conexionRecibir) {
 		this.conexionRecibir = conexionRecibir;
 	}
 	
-	public List<Usuario> seleccionar() throws SQLException{
+	public List<UsuarioDTO> select() throws SQLException{
 		
-		List<Usuario> list = new ArrayList<>();
+		List<UsuarioDTO> list = new ArrayList<>();
 		Connection conn = null;
 		PreparedStatement stmt = null;
 		ResultSet rs = null;
@@ -40,7 +40,7 @@ public class UsuarioDao {
 				String username = rs.getString("username");
 				String password = rs.getString("password");
 				
-				Usuario user = new Usuario(id_usuario, username, password);
+				UsuarioDTO user = new UsuarioDTO(id_usuario, username, password);
 				list.add(user);
 			}
 			
@@ -60,7 +60,7 @@ public class UsuarioDao {
 		return list;
 	}
 	
-	public int insertar(Usuario user) throws SQLException {
+	public int insert(UsuarioDTO user) throws SQLException {
 		
 		Connection conn = null;
 		PreparedStatement stmt = null;
@@ -92,7 +92,7 @@ public class UsuarioDao {
 	}
 	
 	
-	public int update(Usuario user) throws SQLException {
+	public int update(UsuarioDTO user) throws SQLException {
 		int registros = 0;
 		Connection conn = null;
 		PreparedStatement stmt = null;
@@ -123,7 +123,7 @@ public class UsuarioDao {
 		return registros;
 	}
 	
-	public int eliminar(Usuario user) throws SQLException {
+	public int delete(UsuarioDTO user) throws SQLException {
 		int registro = 0;
 		Connection conn = null;
 		PreparedStatement stmt = null;
